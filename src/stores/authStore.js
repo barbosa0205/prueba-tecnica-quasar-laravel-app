@@ -2,9 +2,10 @@ import { defineStore } from 'pinia';
 import { onMounted, ref } from 'vue';
 import {api} from '../boot/axios';
 import { getCSRFCookie } from 'src/utils';
-export const useUserStore = defineStore('user', () => {
+export const useAuthStore = defineStore('auth', () => {
 
-  const user = ref(null)
+  const signupErrors = ref(null)
+
 
   onMounted(() => {
     getCSRFCookie()
@@ -25,12 +26,12 @@ export const useUserStore = defineStore('user', () => {
 
     } catch (e) {
 
-        errors.value = e.response.data.errors
+        signupErrors.value = e.response.data.errors
 
     }
   }
 
 
 
-  return {user, register}
+  return {register, signupErrors}
 });
