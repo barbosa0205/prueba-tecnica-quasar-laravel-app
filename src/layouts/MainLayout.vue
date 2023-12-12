@@ -12,10 +12,13 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          Quasar Blog
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <div >
+          <p v-if="user">{{user.name}}</p>
+          <a @click="router.push('/auth/signin')" v-else>Login</a>
+        </div>
       </q-toolbar>
     </q-header>
 
@@ -32,7 +35,7 @@
         </q-item-label>
 
         <EssentialLink
-          v-for="link in essentialLinks"
+          v-for="link in linksList"
           :key="link.title"
           v-bind="link"
         />
@@ -45,11 +48,12 @@
   </q-layout>
 </template>
 
-<script>
+<script setup>
 import { defineComponent, onMounted, ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import { useUserStore } from 'src/stores/userStore'
 import {verifyTokenInLocalStorage} from '../utils'
+import { storeToRefs } from 'pinia';
 const linksList = [
   {
     title: 'Docs',
@@ -94,30 +98,17 @@ const linksList = [
     link: 'https://awesome.quasar.dev'
   }
 ]
+const leftDrawerOpen = ref(false)
+
 const userStore = useUserStore()
+const {user} = storeToRefs(userStore)
 const {getUser} = userStore
 
-export default defineComponent({
-  name: 'MainLayout',
-
-  components: {
-    EssentialLink
-  },
-
-  setup () {
-    const leftDrawerOpen = ref(false)
-
-    return {
-      essentialLinks: linksList,
-      leftDrawerOpen,
-      toggleLeftDrawer () {
+const toggleLeftDrawer = () => {
         leftDrawerOpen.value = !leftDrawerOpen.value
       }
-    }
-  },
-  mounted: () => {
+      onMounted(() => {
     verifyTokenInLocalStorage()
     getUser()
-  },
-})
+  })
 </script>

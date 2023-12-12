@@ -10,7 +10,7 @@ export const useUserStore = defineStore('user', () => {
   const getUser = async () => {
       const resp = await api.get('/user')
       const data = resp.data
-      console.log(data)
+      user.value = data
   }
 
 
