@@ -46,9 +46,10 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
-
+import { useUserStore } from 'src/stores/userStore'
+import {verifyTokenInLocalStorage} from '../utils'
 const linksList = [
   {
     title: 'Docs',
@@ -93,6 +94,8 @@ const linksList = [
     link: 'https://awesome.quasar.dev'
   }
 ]
+const userStore = useUserStore()
+const {getUser} = userStore
 
 export default defineComponent({
   name: 'MainLayout',
@@ -111,6 +114,10 @@ export default defineComponent({
         leftDrawerOpen.value = !leftDrawerOpen.value
       }
     }
-  }
+  },
+  mounted: () => {
+    verifyTokenInLocalStorage()
+    getUser()
+  },
 })
 </script>

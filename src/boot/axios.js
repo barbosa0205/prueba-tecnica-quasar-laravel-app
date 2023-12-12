@@ -9,7 +9,7 @@ import axios from 'axios'
 // for each client)
 
 
-const api = axios.create({ baseURL: 'http://localhost:8000/api'})
+const api = axios.create({ baseURL: 'http://127.0.0.1:8000/api'})
 
 axios.defaults.withCredentials = true
 
@@ -25,4 +25,4 @@ export default boot(({ app }) => {
   //       so you can easily perform requests against your app's API
 })
 
-export { api }
+export { api, axios }

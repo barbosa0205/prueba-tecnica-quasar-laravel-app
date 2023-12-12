@@ -6,31 +6,13 @@ export const useUserStore = defineStore('user', () => {
 
   const user = ref(null)
 
-  onMounted(() => {
-    getCSRFCookie()
-  })
 
-  const register = async ({name,email,password}) => {
-    try {
-
-      const resp = await api.post('/signup', {
-        name,
-        email,
-        password
-      })
-
-
-
-      console.log({data})
-
-    } catch (e) {
-
-        errors.value = e.response.data.errors
-
-    }
+  const getUser = async () => {
+      const resp = await api.get('/user')
+      const data = resp.data
+      console.log(data)
   }
 
 
-
-  return {user, register}
+  return {user, getUser}
 });

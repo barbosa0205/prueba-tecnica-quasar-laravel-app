@@ -8,4 +8,10 @@ const getCSRFCookie = async () => {
  }
 }
 
-export {getCSRFCookie}
+const verifyTokenInLocalStorage = () => {
+  if(localStorage.getItem('prueba-tecninca-quasar-token')) {
+    api.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('prueba-tecninca-quasar-token')
+  }
+}
+
+export {getCSRFCookie,verifyTokenInLocalStorage}
