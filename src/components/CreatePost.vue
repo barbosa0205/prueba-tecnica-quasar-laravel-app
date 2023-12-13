@@ -61,11 +61,14 @@
       <div class="row tw-justify-end items-center">
         <primary-button
           @click="
-            storePost({
-              title: postTitle,
-              body: postText,
-              user_id: user.id,
-            })
+            () => {
+              storePost({
+                title: postTitle,
+                body: postText,
+                user_id: user.id,
+              });
+              toggleCreatePost();
+            }
           "
           label="publicar"
           size="md"

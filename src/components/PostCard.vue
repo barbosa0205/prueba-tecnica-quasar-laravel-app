@@ -18,10 +18,16 @@
         auto-close
       >
         <q-list>
-          <q-item @click="toggleEditPost()" clickable dense>Edit</q-item>
+          <q-item @click="toggleEditPost()" clickable dense>Editar</q-item>
+          <q-item @click="deletePost(postData.id)" clickable dense
+            >Eliminar</q-item
+          >
         </q-list>
       </q-btn-dropdown>
     </header>
+    <h2 class="q-px-md q-mb-md tw-truncate tw-text-lg tw-font-medium">
+      {{ postData.title }}
+    </h2>
     <section class="q-px-md q-mb-md" v-html="postData.body"></section>
     <footer class="full-width bg-grey-2"></footer>
   </q-card>
@@ -97,7 +103,7 @@ const { user } = storeToRefs(userStore);
 
 const postStore = usePostStore();
 
-const { updatePost } = postStore;
+const { updatePost, deletePost } = postStore;
 
 const showEditPost = ref(false);
 const postTitle = ref(postData?.title);
