@@ -2,7 +2,7 @@
   <section
     class="q-mt-xl q-pa-md tw-w-full tw-max-w-md tw-mx-auto tw-bg-white tw-shadow-sm tw-rounded-2xl"
   >
-    <header>
+    <header v-if="user">
       <div class="row items-center">
         <q-avatar class="tw-w-10 tw-h-10 sm:tw-w-12 sm:tw-h-12">
           <img
@@ -83,6 +83,9 @@ import { usePostStore } from "src/stores/postStore";
 import { ref } from "vue";
 
 import PrimaryButton from "./PrimaryButton.vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const showCreatePost = ref(false);
 const postTitle = ref("");
@@ -95,6 +98,9 @@ const postStore = usePostStore();
 const { storePost } = postStore;
 
 const toggleCreatePost = () => {
+  if (!user.value) {
+    return router.push({ name: "signin" });
+  }
   showCreatePost.value = !showCreatePost.value;
 };
 </script>

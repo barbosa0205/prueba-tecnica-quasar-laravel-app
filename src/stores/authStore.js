@@ -1,68 +1,62 @@
-import { defineStore } from 'pinia';
-import { onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
-import {api, axios} from '../boot/axios';
-import { getCSRFCookie } from 'src/utils';
-export const useAuthStore = defineStore('auth', () => {
+import { defineStore } from "pinia";
+import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
+import { api, axios } from "../boot/axios";
+import { getCSRFCookie } from "src/utils";
+export const useAuthStore = defineStore("auth", () => {
+  const router = useRouter();
 
-  const router = useRouter()
-
-  const signupErrors = ref(null)
-  const signinErrors = ref(null)
-
+  const signupErrors = ref(null);
+  const signinErrors = ref(null);
 
   onMounted(() => {
-    getCSRFCookie()
-  })
+    getCSRFCookie();
+  });
 
-  const register = async ({name,email,password}) => {
+  const register = async ({ name, email, password }) => {
     try {
-
-      const resp = await api.post('/signup', {
+      const resp = await api.post("/signup", {
         name,
         email,
-        password
-      })
-      const data = await resp.data
-      if(data.token) {
-        api.defaults.headers.common['Authorization'] = 'Bearer ' + data.token
+        password,
+      });
+      const data = await resp.data;
+      if (data.token) {
+        api.defaults.headers.common["Authorization"] = "Bearer " + data.token;
 
-        localStorage.setItem('prueba-tecninca-quasar-token', data.token)
-          router.push('/')
+        localStorage.setItem("prueba-tecninca-quasar-token", data.token);
+        router.push("/");
       }
-
     } catch (e) {
-
-        signupErrors.value = e.response.data.errors
-
+      signupErrors.value = e.response.data.errors;
     }
-  }
+  };
 
-  const login = async ({email,password}) => {
+  const login = async ({ email, password }) => {
     try {
-
-      const resp = await api.post('/signin', {
+      const resp = await api.post("/signin", {
         email,
-        password
-      })
-      const data = await resp.data
+        password,
+      });
+      const data = await resp.data;
 
-      if(data.token) {
+      if (data.token) {
+        api.defaults.headers.common["Authorization"] = "Bearer " + data.token;
 
-      api.defaults.headers.common['Authorization'] = 'Bearer ' + data.token
+        localStorage.setItem("prueba-tecninca-quasar-token", data.token);
 
-      localStorage.setItem('prueba-tecninca-quasar-token', data.token)
-
-        router.push('/')
+        router.push("/");
       }
-
     } catch (e) {
-
-        signinErrors.value = e.response.data.errors
-
+      signinErrors.value = e.response.data.errors;
     }
-  }
+  };
 
+  const logout = () => {
+    localStorage.removeItem("prueba-tecninca-quasar-token");
 
-  return {register, login, signinErrors, signupErrors}
+    router.push({ name: "signin" });
+  };
+
+  return { register, login, signinErrors, signupErrors, logout };
 });

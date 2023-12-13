@@ -45,7 +45,7 @@
         ></span
       >
       <primary-button
-        @click="register(formData)"
+        @click="login(formData)"
         label="entra"
         class="q-mt-md tw-w-full tw-max-w-[200px]"
       />
@@ -53,7 +53,7 @@
   </q-form>
 </template>
 <script setup>
-import { ref } from "vue";
+import { onActivated, onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
 
 import { useUserStore } from "../../stores/userStore";
@@ -70,6 +70,10 @@ const formData = ref({
 });
 
 const router = useRouter();
+
+const userStore = useUserStore();
+
+const { user } = storeToRefs(userStore);
 
 const authStore = useAuthStore();
 

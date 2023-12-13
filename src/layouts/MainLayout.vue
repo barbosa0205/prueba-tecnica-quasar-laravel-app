@@ -14,8 +14,16 @@
         <q-toolbar-title> Quasar Blog </q-toolbar-title>
 
         <div>
-          <p v-if="user">{{ user.name }}</p>
-          <a class="cursor-pointer" @click="router.push('/auth/signin')" v-else
+          <div class="row items-center" v-if="user">
+            <p class="q-mr-md tw-text-lg tw-cursor-default">{{ user.name }}</p>
+            <q-icon
+              @click="logout"
+              class="cursor-pointer"
+              name="logout"
+              size="xs"
+            />
+          </div>
+          <a v-else class="cursor-pointer" @click="router.push('/auth/signin')"
             >Login</a
           >
         </div>
@@ -47,6 +55,7 @@ import { useUserStore } from "src/stores/userStore";
 import { verifyTokenInLocalStorage } from "../utils";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "src/stores/authStore";
 
 const linksList = [
   {
@@ -99,6 +108,10 @@ const router = useRouter();
 const userStore = useUserStore();
 const { user } = storeToRefs(userStore);
 const { getUser } = userStore;
+
+const authStore = useAuthStore();
+
+const { logout } = authStore;
 
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value;

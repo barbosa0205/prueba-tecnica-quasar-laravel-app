@@ -6,7 +6,7 @@
       class="full-width column items-center justify-center q-mt-xl q-px-md"
     >
       <PostCard
-        v-for="(post, index) in recentPosts"
+        v-for="(post, index) in recentPosts.data"
         :key="index"
         :post-data="post"
       />
@@ -27,12 +27,9 @@ const { user } = storeToRefs(userStore);
 
 const postStore = usePostStore();
 const { getRecentPosts } = postStore;
-
-const recentPosts = ref(null);
+const { recentPosts } = storeToRefs(postStore);
 
 onMounted(async () => {
-  const posts = await getRecentPosts();
-
-  recentPosts.value = posts.data;
+  getRecentPosts();
 });
 </script>

@@ -1,12 +1,16 @@
 import { defineStore } from "pinia";
 import { api } from "src/boot/axios";
+import { ref } from "vue";
 
 export const usePostStore = defineStore("post", () => {
+  const recentPosts = ref(null);
+
   const getRecentPosts = async (qty = 5) => {
     try {
       const resp = await api.get(`/posts?qty=${qty}`);
       const data = resp.data;
-      return data;
+
+      recentPosts.value = data;
     } catch (error) {
       console.log(error);
     }
@@ -27,5 +31,30 @@ export const usePostStore = defineStore("post", () => {
     }
   };
 
-  return { storePost, getRecentPosts };
+  const updatePost = async ({ user_id, post_id, title, body }) => {
+    try {
+      const resp = await api.put(`/posts/${post_id}`, {
+        user_id,
+        title,
+        body,
+        post_id,
+      });
+      const data = resp.data;
+      const indexOfPost = recentPosts.value.data.findIndex(
+        (post) => post.id === post_id
+      );
+
+      const userOfPost = recentPosts.value.data[indexOfPost].user;
+
+      const newRecentPostsArray = recentPosts.value.data;
+
+      newRecentPostsArray[indexOfPost] = { ...data.post, user: userOfPost };
+
+      recentPosts.value.data = newRecentPostsArray;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return { storePost, updatePost, getRecentPosts, recentPosts };
 });
