@@ -46,11 +46,13 @@ export const useAuthStore = defineStore('auth', () => {
         password
       })
       const data = await resp.data
+
       if(data.token) {
 
       api.defaults.headers.common['Authorization'] = 'Bearer ' + data.token
 
       localStorage.setItem('prueba-tecninca-quasar-token', data.token)
+
         router.push('/')
       }
 

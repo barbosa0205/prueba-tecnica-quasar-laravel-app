@@ -1,55 +1,80 @@
 <template lang="">
-
-
   <q-form class="q-px-md tw-max-w-lg tw-mx-auto">
-  <title-primary >
-    <p class="q-pb-lg q-pt-xl q-pl-md">Inicia Sesion</p>
-  </title-primary>
+    <title-primary>
+      <p class="q-pb-lg q-pt-xl q-pl-md">Inicia Sesion</p>
+    </title-primary>
 
-<div class="q-mb-lg" >
-  <display-errors :errors="signupErrors" field="email"/>
+    <div class="q-mb-lg">
+      <display-errors :errors="signinErrors" field="email" />
 
-  <q-input label="Correo Electronico" v-model="formData.email" type="email" :rules="[val => val && val.trim().length > 0 || 'Por favor ingrese un email valido']"></q-input>
-</div>
+      <q-input
+        label="Correo Electronico"
+        v-model="formData.email"
+        type="email"
+        :rules="[
+          (val) =>
+            (val && val.trim().length > 0) ||
+            'Por favor ingrese un email valido',
+        ]"
+      ></q-input>
+    </div>
 
-<div class="q-mb-lg" >
-  <display-errors :errors="signupErrors" field="password"/>
+    <div class="q-mb-lg">
+      <display-errors :errors="signinErrors" field="password" />
 
-    <q-input class="q-mb-lg" label="Contraseña" v-model="formData.password" type="password" :rules="[val => val && val.length > 0 || 'Por favor ingrese una contraseña valida']"></q-input>
-</div>
+      <q-input
+        class="q-mb-lg"
+        label="Contraseña"
+        v-model="formData.password"
+        type="password"
+        :rules="[
+          (val) =>
+            (val && val.length > 0) ||
+            'Por favor ingrese una contraseña valida',
+        ]"
+      ></q-input>
+    </div>
 
-  <div class="row justify-center items-center">
-
-    <q-btn @click="login(formData)" class="tw-w-full tw-max-w-xs" label="Entra" outline size="lg" padding="10px 20px" color="primary  " />
-  </div>
-</q-form>
-
+    <div class="column justify-center items-center">
+      <span
+        >No tienes una cuenta?
+        <span
+          class="cursor-pointer text-primary"
+          @click="router.push('/auth/signup')"
+          >Registrate</span
+        ></span
+      >
+      <primary-button
+        @click="register(formData)"
+        label="entra"
+        class="q-mt-md tw-w-full tw-max-w-[200px]"
+      />
+    </div>
+  </q-form>
 </template>
 <script setup>
-  import { ref } from 'vue';
-  import { storeToRefs } from 'pinia';
+import { ref } from "vue";
+import { storeToRefs } from "pinia";
 
-  import {useUserStore} from '../../stores/userStore'
-  import { useAuthStore } from 'src/stores/authStore';
+import { useUserStore } from "../../stores/userStore";
+import { useAuthStore } from "src/stores/authStore";
 
-  import TitlePrimary from '../../components/TitlePrimary.vue'
-  import DisplayErrors from '../../components/DisplayErrors.vue'
+import TitlePrimary from "../../components/TitlePrimary.vue";
+import PrimaryButton from "src/components/PrimaryButton.vue";
+import DisplayErrors from "../../components/DisplayErrors.vue";
+import { useRouter } from "vue-router";
 
-  const formData = ref({
-    name: '',
-    email: '',
-    password: ''
-  })
+const formData = ref({
+  email: "",
+  password: "",
+});
 
+const router = useRouter();
 
-  const authStore = useAuthStore()
+const authStore = useAuthStore();
 
-  const {signinErrors} = storeToRefs(authStore)
+const { signinErrors } = storeToRefs(authStore);
 
-  const {login} = authStore
-
-
+const { login } = authStore;
 </script>
-<style lang="">
-
-</style>
+<style lang=""></style>
