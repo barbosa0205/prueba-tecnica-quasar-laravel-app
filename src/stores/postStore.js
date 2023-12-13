@@ -35,9 +35,9 @@ export const usePostStore = defineStore("post", () => {
         ...recentPosts.value.data,
       ];
 
-      recentPosts.value.data = newArrayFiltered;
+      return resp;
     } catch (error) {
-      console.log(error);
+      return error;
     }
   };
 
@@ -61,8 +61,9 @@ export const usePostStore = defineStore("post", () => {
       newRecentPostsArray[indexOfPost] = { ...data.post, user: userOfPost };
 
       recentPosts.value.data = newRecentPostsArray;
+      return resp;
     } catch (error) {
-      console.log(error);
+      return error;
     }
   };
 

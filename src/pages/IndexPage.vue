@@ -6,8 +6,8 @@
       class="full-width column items-center justify-center q-mt-xl q-px-md"
     >
       <PostCard
-        v-for="(post, index) in recentPosts.data"
-        :key="index"
+        v-for="post in recentPosts.data"
+        :key="post.id"
         :post-data="post"
       />
     </section>

@@ -48,6 +48,11 @@
       </header>
 
       <div class="tw-max-h-[350px] tw-overflow-y-scroll">
+        <display-errors
+          class="q-mb-md q-ml-sm"
+          :errors="editPostErrors"
+          field="title"
+        />
         <q-input
           class="q-px-sm tw-text-xl"
           v-model="postTitle"
@@ -63,22 +68,17 @@
           :toolbar="[['bold', 'italic', 'strike', 'underline']]"
         />
       </div>
+      <display-errors
+        class="q-mt-md q-ml-sm"
+        :errors="editPostErrors"
+        field="body"
+      />
       <div class="row tw-justify-end items-center">
         <primary-button
           label="publicar"
           size="md"
           class="q-ma-md"
-          @click="
-            () => {
-              updatePost({
-                title: postTitle,
-                body: postText,
-                user_id: postData.user_id,
-                post_id: postData.id,
-              });
-              toggleEditPost();
-            }
-          "
+          @click="handleUpdatePost"
         />
       </div>
     </q-card>
@@ -89,8 +89,11 @@ import { storeToRefs } from "pinia";
 import { useUserStore } from "src/stores/userStore";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import PrimaryButton from "./PrimaryButton.vue";
 import { usePostStore } from "src/stores/postStore";
+
+import PrimaryButton from "./PrimaryButton.vue";
+import DisplayErrors from "../components/DisplayErrors.vue";
+
 const { postData } = defineProps({
   postData: Object,
 });
@@ -108,9 +111,28 @@ const { updatePost, deletePost } = postStore;
 const showEditPost = ref(false);
 const postTitle = ref(postData?.title);
 const postText = ref(postData?.body);
+const editPostErrors = ref(null);
 
 const toggleEditPost = () => {
   showEditPost.value = !showEditPost.value;
+};
+
+const handleUpdatePost = () => {
+  updatePost({
+    title: postTitle.value,
+    body: postText.value,
+    user_id: postData.user_id,
+    post_id: postData.id,
+  }).then((q) => {
+    if (q?.response?.status === 422) {
+      console.log(q.response.data.errors);
+      editPostErrors.value = q.response.data.errors;
+    }
+    if (q.status === 201) {
+      console.log("todo bien mi comando");
+      toggleEditPost();
+    }
+  });
 };
 </script>
 <style lang=""></style>

@@ -43,6 +43,12 @@
       </header>
 
       <div class="tw-max-h-[350px] tw-overflow-y-scroll">
+        <display-errors
+          class="q-mt-md q-ml-sm"
+          :errors="createPostErrors"
+          field="title"
+        />
+
         <q-input
           class="q-px-sm tw-text-xl"
           v-model="postTitle"
@@ -50,26 +56,23 @@
           borderless
         />
         <q-editor
-          class="tw-rounded-none"
+          class="tw-rounded-none tw-text-lg"
           v-model="postText"
           flat
           toolbar-color="primary"
           spellcheck="false"
+          placeholder="Cuerpo de tu post"
           :toolbar="[['bold', 'italic', 'strike', 'underline']]"
         />
       </div>
+      <display-errors
+        class="q-mt-md q-ml-sm"
+        :errors="createPostErrors"
+        field="body"
+      />
       <div class="row tw-justify-end items-center">
         <primary-button
-          @click="
-            () => {
-              storePost({
-                title: postTitle,
-                body: postText,
-                user_id: user.id,
-              });
-              toggleCreatePost();
-            }
-          "
+          @click="handleStorePost"
           label="publicar"
           size="md"
           class="q-ma-md"
@@ -84,16 +87,17 @@ import { useUserStore } from "src/stores/userStore";
 import { usePostStore } from "src/stores/postStore";
 
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 import PrimaryButton from "./PrimaryButton.vue";
-import { useRouter } from "vue-router";
+import DisplayErrors from "../components/DisplayErrors.vue";
 
 const router = useRouter();
 
 const showCreatePost = ref(false);
 const postTitle = ref("");
 const postText = ref("");
-
+const createPostErrors = ref(null);
 const userStore = useUserStore();
 const { user } = storeToRefs(userStore);
 
@@ -105,6 +109,24 @@ const toggleCreatePost = () => {
     return router.push({ name: "signin" });
   }
   showCreatePost.value = !showCreatePost.value;
+};
+
+const handleStorePost = () => {
+  storePost({
+    title: postTitle.value,
+    body: postText.value,
+    user_id: user.value.id,
+  }).then((q) => {
+    console.log(q);
+    if (q?.response?.status === 422) {
+      console.log(q.response.data.errors);
+      createPostErrors.value = q.response.data.errors;
+    }
+    if (q.status === 201) {
+      console.log("todo bien mi comando");
+      toggleCreatePost();
+    }
+  });
 };
 </script>
 <style lang=""></style>
