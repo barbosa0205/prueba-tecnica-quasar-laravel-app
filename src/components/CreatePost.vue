@@ -1,6 +1,6 @@
 <template lang="">
   <section
-    class="q-mt-xl q-pa-md tw-w-full tw-max-w-sm tw-mx-auto tw-bg-white tw-shadow-sm tw-rounded-2xl"
+    class="q-mt-xl q-pa-md tw-w-full tw-max-w-md tw-mx-auto tw-bg-white tw-shadow-sm tw-rounded-2xl"
   >
     <header>
       <div class="row items-center">
@@ -27,7 +27,7 @@
   <!-- Modal Create Post -->
   <div
     v-if="showCreatePost"
-    class="fixed-center full-width full-height column justify-center items-center tw-bg-neutral-800/40"
+    class="fixed-center full-width full-height column justify-center items-center tw-bg-neutral-800/40 tw-z-10"
   >
     <q-card class="tw-w-full tw-max-w-md tw-min-h-[250px] tw-shadow-md">
       <header class="bg-blue-grey-1 row justify-between items-center">

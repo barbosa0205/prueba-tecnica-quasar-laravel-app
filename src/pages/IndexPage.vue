@@ -1,6 +1,16 @@
 <template>
   <q-page class="">
     <create-post />
+    <section
+      v-if="recentPosts"
+      class="full-width column items-center justify-center q-mt-xl q-px-md"
+    >
+      <PostCard
+        v-for="(post, index) in recentPosts"
+        :key="index"
+        :post-data="post"
+      />
+    </section>
   </q-page>
 </template>
 
@@ -8,8 +18,10 @@
 import { storeToRefs } from "pinia";
 import { useUserStore } from "src/stores/userStore";
 import CreatePost from "src/components/CreatePost.vue";
+import PostCard from "src/components/PostCard.vue";
 import { usePostStore } from "src/stores/postStore";
 import { onMounted, ref } from "vue";
+
 const userStore = useUserStore();
 const { user } = storeToRefs(userStore);
 
@@ -18,7 +30,9 @@ const { getRecentPosts } = postStore;
 
 const recentPosts = ref(null);
 
-onMounted(() => {
-  recentPosts.value = getRecentPosts();
+onMounted(async () => {
+  const posts = await getRecentPosts();
+
+  recentPosts.value = posts.data;
 });
 </script>

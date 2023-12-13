@@ -6,7 +6,7 @@ export const usePostStore = defineStore("post", () => {
     try {
       const resp = await api.get(`/posts?qty=${qty}`);
       const data = resp.data;
-      console.log(data);
+      return data;
     } catch (error) {
       console.log(error);
     }
